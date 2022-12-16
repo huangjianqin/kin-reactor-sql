@@ -28,6 +28,14 @@ public final class Result {
         return (T) columns.get(column);
     }
 
+    /**
+     * 返回所有列数据
+     * @return  所有列数据
+     */
+    public Map<String, Object> all() {
+        return columns;
+    }
+
     @Override
     public String toString() {
         return "Result{" +
