@@ -109,6 +109,10 @@ public final class ReactorSqlExecutor {
                     String alias = item.getAlias() == null ? expression.toString() : item.getAlias().getName();
                     //如果使用函数, 但没有as, 则以函数名作为最终结果的列名
                     String fAlias = StringUtils.cleanFunc(StringUtils.cleanDoubleQuotation(alias));
+                    //table.a.b, 去掉table
+                    if (fAlias.contains(".")) {
+                        fAlias = fAlias.substring(fAlias.indexOf(".") + 1);
+                    }
                     //select a,b,c
                     Function<Record, Object> mapper = ValueMapFeature.createMapperOrThrow(expression);
                     if (Objects.nonNull(mappers.put(fAlias, mapper))) {

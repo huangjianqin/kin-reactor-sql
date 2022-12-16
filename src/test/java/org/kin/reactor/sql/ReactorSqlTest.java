@@ -27,38 +27,63 @@ public class ReactorSqlTest {
 
     @Test
     void test1() {
-        ReactorSql.create("select c2 from test")
+        ReactorSql.create("select this.c2.d1 from test where this.c2.d1 > 25")
                 .prepare()
                 .apply(Flux.fromIterable(Arrays.asList(
-                        new HashMap<String, Object>(){
+                        new HashMap<String, Object>() {
                             {
                                 put("c1", 1);
+                                put("c2", new HashMap<String, Object>() {
+                                    {
+                                        put("d1", 10);
+                                    }
+                                });
                             }
                         },
-                        new HashMap<String, Object>(){
+                        new HashMap<String, Object>() {
                             {
                                 put("c1", 2);
+                                put("c2", new HashMap<String, Object>() {
+                                    {
+                                        put("d1", 20);
+                                    }
+                                });
                             }
                         },
-                        new HashMap<String, Object>(){
+                        new HashMap<String, Object>() {
                             {
                                 put("c1", 3);
+                                put("c2", new HashMap<String, Object>() {
+                                    {
+                                        put("d1", 30);
+                                    }
+                                });
                             }
                         },
-                        new HashMap<String, Object>(){
+                        new HashMap<String, Object>() {
                             {
                                 put("c1", 4);
+                                put("c2", new HashMap<String, Object>() {
+                                    {
+                                        put("d1", 40);
+                                    }
+                                });
                             }
                         },
-                        new HashMap<String, Object>(){
+                        new HashMap<String, Object>() {
                             {
                                 put("c1", 5);
+                                put("c2", new HashMap<String, Object>() {
+                                    {
+                                        put("d1", 50);
+                                    }
+                                });
                             }
                         }
                 )))
                 .doOnNext(System.out::println)
                 .as(StepVerifier::create)
-                .expectNextCount(5)
+                .expectNextCount(3)
                 .verifyComplete();
     }
 

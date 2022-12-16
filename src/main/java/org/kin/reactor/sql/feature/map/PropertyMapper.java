@@ -22,8 +22,8 @@ public final class PropertyMapper implements ValueMapFeature<Column> {
         //分两部分
         String[] fullName = PropertyUtils.splitDot(column.getFullyQualifiedName(), 2);
 
-        String name = fullName.length == 2 ? fullName[1] : fullName[0];
         String tableName = fullName.length == 1 ? Record.THIS : fullName[0];
+        String name = fullName.length == 2 ? fullName[1] : fullName[0];
 
         return r -> getProperty(tableName, name, r);
     }
