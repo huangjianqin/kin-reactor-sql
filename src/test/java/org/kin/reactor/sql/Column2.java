@@ -7,28 +7,27 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author huangjianqin
  * @date 2022/12/16
  */
-public class Column {
+public class Column2 {
     private static final char[] CHARS = new char[]{'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '{', '}', '\\', '|',
             'a', 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', ':', '\'', '\"',
             'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '<', '.', '>', '/', '?', ' '};
 
-    private int a;
-    private long b;
-    private double c;
-    private String d = "";
+    private int e;
+    private long f;
+    private double g;
+    private String h = "";
     private Date date = new Date();
     private List<Integer> list = new ArrayList<>();
     private Map<String, Object> map = new HashMap<>();
-    private Column2 c2 = new Column2();
 
-    public Column() {
-        this.a = ThreadLocalRandom.current().nextInt(100);
-        this.b = 1000 + ThreadLocalRandom.current().nextLong(10000);
-        this.c = 100000 + ThreadLocalRandom.current().nextDouble(10000);
+    public Column2() {
+        this.e = ThreadLocalRandom.current().nextInt(100);
+        this.f = 1000 + ThreadLocalRandom.current().nextLong(10000);
+        this.g = 100000 + ThreadLocalRandom.current().nextDouble(10000);
 
         for (int i = 0; i < 5 + ThreadLocalRandom.current().nextInt(20); i++) {
-            d += CHARS[ThreadLocalRandom.current().nextInt(CHARS.length)];
-            map.put(i + "", d);
+            h += CHARS[ThreadLocalRandom.current().nextInt(CHARS.length)];
+            map.put(i + "", h);
         }
 
         for (int i = 0; i < 5 + ThreadLocalRandom.current().nextInt(20); i++) {
@@ -38,36 +37,36 @@ public class Column {
     }
 
     //setter && getter
-    public int getA() {
-        return a;
+    public int getE() {
+        return e;
     }
 
-    public void setA(int a) {
-        this.a = a;
+    public void setE(int e) {
+        this.e = e;
     }
 
-    public long getB() {
-        return b;
+    public long getF() {
+        return f;
     }
 
-    public void setB(long b) {
-        this.b = b;
+    public void setF(long f) {
+        this.f = f;
     }
 
-    public double getC() {
-        return c;
+    public double getG() {
+        return g;
     }
 
-    public void setC(double c) {
-        this.c = c;
+    public void setG(double g) {
+        this.g = g;
     }
 
-    public String getD() {
-        return d;
+    public String getH() {
+        return h;
     }
 
-    public void setD(String d) {
-        this.d = d;
+    public void setH(String h) {
+        this.h = h;
     }
 
     public Date getDate() {
@@ -94,25 +93,16 @@ public class Column {
         this.map = map;
     }
 
-    public Column2 getC2() {
-        return c2;
-    }
-
-    public void setC2(Column2 c2) {
-        this.c2 = c2;
-    }
-
     @Override
     public String toString() {
-        return "Column{" +
-                "a=" + a +
-                ", b=" + b +
-                ", c=" + c +
-                ", d='" + d + '\'' +
+        return "Column2{" +
+                "e=" + e +
+                ", f=" + f +
+                ", g=" + g +
+                ", h='" + h + '\'' +
                 ", date=" + date +
                 ", list=" + list +
                 ", map=" + map +
-                ", c2=" + c2 +
                 '}';
     }
 }
