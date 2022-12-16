@@ -95,7 +95,7 @@ public class ReactorSqlTest {
             columns.add(new Column());
         }
 
-        ReactorSql.create("select a+10 as a1, a, now() from test")
+        ReactorSql.create("select a+10 as a1, a, now(), list[4] as item, map['3'] as mm from test")
                 .prepare()
                 .apply(Flux.fromIterable(columns))
                 .doOnNext(System.out::println)
