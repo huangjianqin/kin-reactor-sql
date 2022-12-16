@@ -42,6 +42,21 @@ public final class StringUtils {
     }
 
     /**
+     * 去掉(...)
+     * @param s 字符串
+     * @return 去掉(...)后的字符串
+     */
+    public static String cleanFunc(String s){
+        if (s == null) {
+            return null;
+        }
+        if (s.contains("(")) {
+            return s.substring(0, s.indexOf("("));
+        }
+        return s;
+    }
+
+    /**
      * 判断实例{@link #toString()}是否为空串
      * @param obj   实例
      * @return  {@link #toString()}是否为空串

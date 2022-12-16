@@ -1,5 +1,7 @@
 package org.kin.reactor.sql;
 
+import reactor.util.annotation.Nullable;
+
 import java.util.Map;
 
 /**
@@ -21,6 +23,7 @@ public final class Result {
      * @param <T>   column value class
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T get(String column){
         return (T) columns.get(column);
     }

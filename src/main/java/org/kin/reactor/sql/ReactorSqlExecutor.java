@@ -6,9 +6,7 @@ import net.sf.jsqlparser.statement.select.*;
 import org.kin.reactor.sql.feature.filter.FilterFeature;
 import org.kin.reactor.sql.feature.map.ValueMapFeature;
 import org.kin.reactor.sql.utils.StringUtils;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -17,13 +15,14 @@ import java.util.function.Function;
 
 /**
  * sql executor
+ *
  * @author huangjianqin
  * @date 2022/12/13
  */
 public final class ReactorSqlExecutor {
     /** parsed sql */
     private final PlainSelect parsedSql;
-    /** sql 执行上下文*/
+    /** sql 执行上下文 */
     private final Context context = new Context();
 
     public ReactorSqlExecutor(PlainSelect parsedSql) {
@@ -70,7 +69,7 @@ public final class ReactorSqlExecutor {
      */
     public Flux<Result> apply(Flux<?> datasource) {
         //raw record
-        Flux<Record> recordFlux = datasource.map(obj -> Record.newRecord(null, obj, context))
+        Flux<Record> recordFlux = datasource.map(obj -> Record.newRecord(obj, context))
                 .elapsed()
                 .index((index, item) -> {
                     Map<String, Object> rowInfo = new HashMap<>(2);
@@ -92,7 +91,10 @@ public final class ReactorSqlExecutor {
         return selectMapper(recordFlux);
     }
 
-    private Flux<Result> selectMapper(Flux<Record> recordFlux){
+    /**
+     * 处理select
+     */
+    private Flux<Result> selectMapper(Flux<Record> recordFlux) {
         //单值映射
         Map<String, Function<Record, Object>> mappers = new LinkedHashMap<>();
         //所有值
@@ -105,16 +107,19 @@ public final class ReactorSqlExecutor {
                     //select a,b,c
                     Expression expression = item.getExpression();
                     String alias = item.getAlias() == null ? expression.toString() : item.getAlias().getName();
-                    String fAlias = StringUtils.cleanDoubleQuotation(alias);
-                    // select a,b,c
+                    //如果使用函数, 但没有as, 则以函数名作为最终结果的列名
+                    String fAlias = StringUtils.cleanFunc(StringUtils.cleanDoubleQuotation(alias));
+                    //select a,b,c
                     Function<Record, Object> mapper = ValueMapFeature.createMapperOrThrow(expression);
-                    mappers.put(fAlias, mapper);
+                    if (Objects.nonNull(mappers.put(fAlias, mapper))) {
+                        throw new IllegalStateException(String.format("column name conflict '%s'", fAlias));
+                    };
                 }
 
                 @Override
                 public void visit(AllColumns columns) {
                     //select *
-                    allMapper.add(Record::putRecordToResult);
+                    allMapper.add(Record::saveResult);
                 }
 
                 @Override
@@ -127,21 +132,15 @@ public final class ReactorSqlExecutor {
                     } else {
                         name = StringUtils.cleanDoubleQuotation(alias.getName());
                     }
-                    allMapper.add(record -> {
-                        Object val = record.getRecord(name);
-                        if (val instanceof Map) {
-                            record.setResults(((Map) val));
-                        } else {
-                            record.setResult(name, val);
-                        }
-                    });
+                    allMapper.add(record -> record.saveResult(name, record.getRecord(name)));
                 }
             });
         }
 
+        //结果映射
         return recordFlux.map(record -> {
             for (Map.Entry<String, Function<Record, Object>> entry : mappers.entrySet()) {
-                record.setResult(entry.getKey(), entry.getValue().apply(record));
+                record.saveResult(entry.getKey(), entry.getValue().apply(record));
             }
 
             for (Consumer<Record> consumer : allMapper) {

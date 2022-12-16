@@ -70,7 +70,7 @@ public class ReactorSqlTest {
             columns.add(new Column());
         }
 
-        ReactorSql.create("select * from test")
+        ReactorSql.create("select a+10 as a1, a, now() from test")
                 .prepare()
                 .apply(Flux.fromIterable(columns))
                 .doOnNext(System.out::println)

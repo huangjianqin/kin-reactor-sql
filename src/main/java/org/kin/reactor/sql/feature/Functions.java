@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
+ * 复用部分function实例
  * @author huangjianqin
  * @date 2022/12/14
  */

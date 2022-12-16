@@ -46,7 +46,7 @@ public final class PropertyMapper implements ValueMapFeature<Column> {
 
         //从result取属性
         if (null == temp) {
-            temp = PropertyUtils.getProperty(name, record.asMap());
+            temp = PropertyUtils.getProperty(name, record.getResults());
         }
 
         //从record取属性

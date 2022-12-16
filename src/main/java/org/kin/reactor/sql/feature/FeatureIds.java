@@ -1,6 +1,7 @@
 package org.kin.reactor.sql.feature;
 
 /**
+ * 一些内置支持的feature id
  * @author huangjianqin
  * @date 2022/12/14
  */

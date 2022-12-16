@@ -326,6 +326,7 @@ public final class GlobalFeatures {
      * @param <T> {@link FilterFeature}真实类型
      * @return {@link FilterFeature}实现
      */
+    @Nullable
     public static <T extends FilterFeature<? extends Expression>> T getFilterFeature(String id) {
         return getFeature(FeatureIds.wrapFilterId(id));
     }
@@ -348,6 +349,7 @@ public final class GlobalFeatures {
      * @param <T> {@link ValueMapFeature}真实类型
      * @return {@link ValueMapFeature}实现
      */
+    @Nullable
     public static <T extends ValueMapFeature<? extends Expression>> T getValueMapFeature(String id) {
         return getFeature(FeatureIds.wrapMapperId(id));
     }
