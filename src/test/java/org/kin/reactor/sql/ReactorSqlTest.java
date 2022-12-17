@@ -103,4 +103,19 @@ public class ReactorSqlTest {
                 .expectNextCount(num)
                 .verifyComplete();
     }
+
+    @Test
+    void test3() {
+        int num = 10;
+        List<Payload> payloads = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            payloads.add(new Payload());
+        }
+
+        ReactorSql.create("select this.c2.d1 from test where this.c2.d1 > 25")
+                .prepare()
+                .apply(Flux.fromIterable(payloads), Payload::getData)
+                .doOnNext(System.out::println)
+                .subscribe();
+    }
 }

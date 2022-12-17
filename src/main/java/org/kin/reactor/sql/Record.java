@@ -13,17 +13,16 @@ import java.util.Map;
 public final class Record {
     /** 当datasource纯基础类型时, 使用$this可以引用该值 */
     public final static String THIS = "this";
+    /** 原始数据 */
+    private final Object raw;
     private final Context context;
     /** key -> table name或者alias, value -> 普通实例或者多层Map<String, Object> */
     private final Map<String, Object> records = new HashMap<>(8);
     /** key -> 最终column name 或者alias, value -> 普通实例或者多层Map<String, Object> */
     private final Map<String, Object> results = new HashMap<>(8);
 
-    public static Record newRecord(Object row, Context context) {
-        return new Record(row, context);
-    }
-
-    private Record(Object record, Context context) {
+    public Record(Object raw, Object record, Context context) {
+        this.raw = raw;
         if (record != null) {
             records.put(THIS, record);
         }
@@ -100,7 +99,7 @@ public final class Record {
     }
 
     public Result toResult(){
-        return new Result(results);
+        return new Result(raw, results);
     }
 
     //getter

@@ -67,9 +67,22 @@ public final class ReactorSqlExecutor {
      * @param datasource 数据流
      * @return sql select result
      */
-    public Flux<Result> apply(Flux<?> datasource) {
+    public <RAW, ACT> Flux<Result> apply(Flux<RAW> datasource) {
+        return apply(datasource, Function.identity());
+    }
+
+    /**
+     * 将sql逻辑应用到指定{@code source}数据流中
+     * mapper的使用场景是针对数据流对象是数据+元数据的组合体, sql逻辑仅允许访问数据, 不允许访问元数据, 但得到处理结果后, 需要结合元数据进行下一步逻辑操作的场景
+     * 当sql逻辑处理完后, 可以使用{@link  Result#getRaw()}对原始数据进行访问
+     *
+     * @param datasource 数据流
+     * @param mapper    从<RAW>提取真实需要处理的数据<ACT>
+     * @return sql select result
+     */
+    public <RAW, ACT> Flux<Result> apply(Flux<RAW> datasource, Function<RAW, ACT> mapper) {
         //raw record
-        Flux<Record> recordFlux = datasource.map(obj -> Record.newRecord(obj, context))
+        Flux<Record> recordFlux = datasource.map(obj -> new Record(obj, mapper.apply(obj), context))
                 .elapsed()
                 .index((index, item) -> {
                     Map<String, Object> rowInfo = new HashMap<>(2);

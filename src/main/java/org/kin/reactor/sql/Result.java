@@ -10,10 +10,13 @@ import java.util.Map;
  * @date 2022/12/12
  */
 public final class Result {
+    /** 原始数据 */
+    private final Object raw;
     /** key -> column name, value -> value */
     private final Map<String, Object> columns;
 
-    public Result(Map<String, Object> columns) {
+    public Result(Object raw, Map<String, Object> columns) {
+        this.raw = raw;
         this.columns = columns;
     }
 
@@ -29,6 +32,16 @@ public final class Result {
     }
 
     /**
+     * 返回原始数据
+     * @return  原始数据
+     * @param <T>   原始数据类型
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getRaw() {
+        return (T) raw;
+    }
+
+    /**
      * 返回所有列数据
      * @return  所有列数据
      */
@@ -39,7 +52,8 @@ public final class Result {
     @Override
     public String toString() {
         return "Result{" +
-                "columnValues=" + columns +
+                "raw=" + raw +
+                ", columns=" + columns +
                 '}';
     }
 }
