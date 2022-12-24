@@ -44,7 +44,7 @@ public final class PropertyUtils {
         }
         if (property instanceof String) {
             //去掉首尾""
-            property = StringUtils.cleanDoubleQuotation((String) property);
+            property = StringUtils.trimDeclaration((String) property);
         }
 
         //当前值

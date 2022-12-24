@@ -4,6 +4,7 @@ import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
+import org.kin.reactor.sql.utils.StringUtils;
 import org.kin.reactor.sql.visitor.TableGetter;
 import reactor.util.annotation.Nullable;
 
@@ -50,7 +51,7 @@ public final class ReactorSql {
     public String getTable() {
         TableGetter getter = new TableGetter();
         parsedSql.getFromItem().accept(getter);
-        return getter.getTable();
+        return StringUtils.trimDeclaration(getter.getTable());
     }
 
     //getter

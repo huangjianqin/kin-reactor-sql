@@ -121,7 +121,7 @@ public final class ReactorSqlExecutor {
                     Expression expression = item.getExpression();
                     String alias = item.getAlias() == null ? expression.toString() : item.getAlias().getName();
                     //如果使用函数, 但没有as, 则以函数名作为最终结果的列名
-                    String fAlias = StringUtils.cleanFunc(StringUtils.cleanDoubleQuotation(alias));
+                    String fAlias = StringUtils.cleanFunc(StringUtils.trimDeclaration(alias));
                     //table.a.b, 去掉table
                     if (fAlias.contains(".")) {
                         fAlias = fAlias.substring(fAlias.indexOf(".") + 1);
@@ -145,9 +145,9 @@ public final class ReactorSqlExecutor {
                     String name;
                     Alias alias = columns.getTable().getAlias();
                     if (alias == null) {
-                        name = StringUtils.cleanDoubleQuotation(columns.getTable().getName());
+                        name = StringUtils.trimDeclaration(columns.getTable().getName());
                     } else {
-                        name = StringUtils.cleanDoubleQuotation(alias.getName());
+                        name = StringUtils.trimDeclaration(alias.getName());
                     }
                     allMapper.add(record -> record.saveResult(name, record.getRecord(name)));
                 }

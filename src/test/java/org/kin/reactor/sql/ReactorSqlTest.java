@@ -112,7 +112,7 @@ public class ReactorSqlTest {
             payloads.add(new Payload());
         }
 
-        ReactorSql.create("select this.c2.d1 from test where this.c2.d1 > 25")
+        ReactorSql.create("select this.c2.d1 from `test` where this.c2.d1 > 25")
                 .prepare()
                 .apply(Flux.fromIterable(payloads), Payload::getData)
                 .doOnNext(System.out::println)

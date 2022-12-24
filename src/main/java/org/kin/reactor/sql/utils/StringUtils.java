@@ -16,16 +16,38 @@ public final class StringUtils {
     }
 
     /**
-     * 去掉首尾的"
+     * 对于变量或者表名, 去掉首尾的"或`
      * @param s 字符串
      * @return 去掉首尾的"后的字符串
      */
-    public static String cleanDoubleQuotation(String s){
+    public static String trimDeclaration(String s){
         if (s == null) {
             return null;
         }
-        boolean startWith = s.charAt(0) == '\"';
-        boolean endWith = s.charAt(s.length() - 1) == '\"';
+
+        if(s.startsWith("\"")){
+            s = trimHeadTailChar(s, '\"');
+            s = trimHeadTailChar(s, '`');
+        }
+        else if(s.startsWith("`")){
+            s = trimHeadTailChar(s, '`');
+            s = trimHeadTailChar(s, '\"');
+        }
+
+        return s.trim();
+    }
+
+    /**
+     * 去掉首尾的{@code target}指定字符
+     * @param s 字符串
+     * @return 去掉首尾的{@code target}指定字符的字符串
+     */
+    public static String trimHeadTailChar(String s, char target){
+        if (s == null) {
+            return null;
+        }
+        boolean startWith = s.charAt(0) == target;
+        boolean endWith = s.charAt(s.length() - 1) == target;
 
         if (!startWith && !endWith) {
             return s;
