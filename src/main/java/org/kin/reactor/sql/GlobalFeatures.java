@@ -263,7 +263,7 @@ public final class GlobalFeatures {
 
             throw new UnsupportedOperationException("target is not array or list");
         }));
-        addGlobal(new SingleParamFuncMapper("md5", p -> MD5.common().encode(p.toString())));
+        addGlobal(new SingleParamFuncMapper("md5", p -> MD5.common().digest(p.toString())));
     }
 
     /**
